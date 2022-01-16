@@ -16,7 +16,7 @@ namespace ServiceBusScaleDeploy
 
             if (Environment.GetEnvironmentVariable("AddServiceBusQueueMessages") == "true")
             {
-                for (int x = 0; x < 2; x++)
+                for (int x = 0; x < Convert.ToInt32(Environment.GetEnvironmentVariable("LoopCount")); x++)
                 {
                     outputEvents.AddAsync("Testing");
                 }
