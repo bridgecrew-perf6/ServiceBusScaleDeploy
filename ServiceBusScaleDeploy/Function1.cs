@@ -8,9 +8,19 @@ namespace ServiceBusScaleDeploy
     public static class Function1
     {
         [FunctionName("Function1")]
-        public static void Run([ServiceBusTrigger("%ServiceBusQueueName%", Connection = "ServiceBusConnection")]string myQueueItem, ILogger log)
+        public static void Run([ServiceBusTrigger("%ServiceBusQueueName%", Connection = "ServiceBusConnection")]string myQueueItem,
+            [ServiceBus("%ServiceBusQueueName%", Connection = "ServiceBusConnection")] IAsyncCollector<string> outputEvents,
+            ILogger log)
         {
             log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
+
+            if (Environment.GetEnvironmentVariable("AddServiceBusQueueMessages") == "true")
+            {
+                for (int x = 0; x < 2; x++)
+                {
+                    outputEvents.AddAsync("Testing");
+                }
+            }
         }
     }
 }
